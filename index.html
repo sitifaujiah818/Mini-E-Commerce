@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Toko Online Mini - KAMEHA SHOP</title>
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <style>
+    body {
+      background-color: #f8f9fa;
+      font-family: Arial, sans-serif;
+    }
+    .product-card {
+      border-radius: 12px;
+      padding: 20px;
+      margin: 15px 0;
+      background: white;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    #keranjang {
+      background: #fff3cd;
+      padding: 15px;
+      border-radius: 12px;
+      margin-top: 20px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+  </style>
+</head>
+<body class="container mt-4">
+
+  <h2 class="text-center mb-4">🛍️ MIUMIU SHOP Mini E-Commerce</h2>
+
+  <!-- Produk 1 -->
+  <div class="product-card">
+    <h4>Tote Bag Blacu</h4>
+    <p>Harga: Rp 50.000</p>
+    <button class="btn btn-success tambah" data-harga="50000" data-nama="Tote Bag Blacu">Tambah</button>
+    <button class="btn btn-danger kurang" data-harga="50000" data-nama="Tote Bag Blacu">Kurangi</button>
+  </div>
+
+  <!-- Produk 2 -->
+  <div class="product-card">
+    <h4>Dompet Pensil Jeans</h4>
+    <p>Harga: Rp 25.000</p>
+    <button class="btn btn-success tambah" data-harga="25000" data-nama="Dompet Pensil Jeans">Tambah</button>
+    <button class="btn btn-danger kurang" data-harga="25000" data-nama="Dompet Pensil Jeans">Kurangi</button>
+  </div>
+
+  <!-- Produk 3 -->
+  <div class="product-card">
+    <h4>Tote Bag Kanvas</h4>
+    <p>Harga: Rp 70.000</p>
+    <button class="btn btn-success tambah" data-harga="70000" data-nama="Tote Bag Kanvas">Tambah</button>
+    <button class="btn btn-danger kurang" data-harga="70000" data-nama="Tote Bag Kanvas">Kurangi</button>
+  </div>
+
+  <!-- Keranjang -->
+  <div id="keranjang">
+    <h4>🛒 Keranjang Belanja</h4>
+    <ul id="daftar-keranjang"></ul>
+    <p id="total">Total: Rp 0</p>
+  </div>
+
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  
+  <script>
+    $(document).ready(function(){
+      let keranjang = {};
+      let totalHarga = 0;
+
+      // Tambah produk
+      $(".tambah").click(function(){
+        let nama = $(this).data("nama");
+        let harga = parseInt($(this).data("harga"));
+
+        if(!keranjang[nama]){
+          keranjang[nama] = { jumlah: 0, harga: harga };
+        }
+        keranjang[nama].jumlah++;
+        totalHarga += harga;
+
+        updateKeranjang();
+      });
+
+      // Kurangi produk
+      $(".kurang").click(function(){
+        let nama = $(this).data("nama");
+        let harga = parseInt($(this).data("harga"));
+
+        if(keranjang[nama] && keranjang[nama].jumlah > 0){
+          keranjang[nama].jumlah--;
+          totalHarga -= harga;
+
+          if(keranjang[nama].jumlah === 0){
+            delete keranjang[nama]; // hapus produk kalau jumlahnya 0
+          }
+          updateKeranjang();
+        }
+      });
+
+      // Update tampilan keranjang
+      function updateKeranjang(){
+        $("#daftar-keranjang").empty();
+        $.each(keranjang, function(nama, item){
+          $("#daftar-keranjang").append("<li>" + nama + " x " + item.jumlah + " (Rp " + (item.jumlah * item.harga).toLocaleString() + ")</li>");
+        });
+        $("#total").text("Total: Rp " + totalHarga.toLocaleString());
+      }
+    });
+  </script>
+
+</body>
+</html>
